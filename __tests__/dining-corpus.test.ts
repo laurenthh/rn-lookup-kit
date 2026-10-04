@@ -29,6 +29,11 @@ describe('dining line corpus', () => {
     expect(DINING_LINES.length).toBeGreaterThanOrEqual(250)
   })
 
+  // The corpus is the contract: known gaps only shrink (22 at v1.0.0).
+  it('has no more known gaps than before', () => {
+    expect(KNOWN_GAPS.length).toBeLessThanOrEqual(22)
+  })
+
   it('names each known gap exactly once, and only corpus lines', () => {
     const texts = DINING_LINES.map(([text]) => text)
     for (const gap of KNOWN_GAPS) {

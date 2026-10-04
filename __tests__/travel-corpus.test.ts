@@ -20,6 +20,11 @@ describe('travel line corpus', () => {
     expect(TRAVEL_LINES.length).toBeGreaterThanOrEqual(250)
   })
 
+  // The corpus is the contract: known gaps only shrink (9 at v1.0.0).
+  it('has no more known gaps than before', () => {
+    expect(KNOWN_GAPS.length).toBeLessThanOrEqual(9)
+  })
+
   it('names each known gap exactly once, and only corpus lines', () => {
     const texts = TRAVEL_LINES.map(([text]) => text)
     for (const gap of KNOWN_GAPS) {

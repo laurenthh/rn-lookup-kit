@@ -7,7 +7,12 @@
     "moduleResolution": "Bundler",
     "noEmit": true,
     "rootDir": ".",
-    "types": ["node"]
+    "types": ["node"],
+    // The README example imports the package by name; check it against src.
+    "paths": {
+      "rn-lookup-kit": ["./src/index.ts"],
+      "rn-lookup-kit/*": ["./src/*/index.ts"]
+    }
   },
-  "include": ["src", "__tests__", "scripts", "vitest.config.ts"]
+  "include": ["src", "__tests__", "scripts", "examples", "vitest.config.ts"]
 }

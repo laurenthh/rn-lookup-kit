@@ -16,9 +16,10 @@ describe('food line corpus', () => {
     })
   }
 
-  it('matches at least 85% of the lines that should match', () => {
+  // v1.0.0 matches 98 %; the bar only rises.
+  it('matches at least 97% of the lines that should match', () => {
     const expected = FOOD_LINES.filter(([, id]) => id !== 'no-match')
     const matched = expected.filter(([line]) => resolveFood(line) !== null)
-    expect(matched.length / expected.length).toBeGreaterThanOrEqual(0.85)
+    expect(matched.length / expected.length).toBeGreaterThanOrEqual(0.97)
   })
 })

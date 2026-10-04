@@ -15,7 +15,8 @@ const SOURCE = join(ROOT, '.cache', 'free-exercise-db.json')
 const SOURCE_URL =
   'https://raw.githubusercontent.com/yuhonas/free-exercise-db/f00c92c7dcf1216a928a52c3706c7ce8e2f71ed5/dist/exercises.json'
 const OUT = join(ROOT, 'src', 'exercise', 'exercises.json')
-const BUDGET_BYTES = 60 * 1024
+// 64 KB: the v1.0.0 table is 58.4 KiB, so a curated batch still fits.
+const BUDGET_BYTES = 64 * 1024
 
 const KIND_BY_CATEGORY: Record<string, ExerciseKind> = {
   strength: 'strength',

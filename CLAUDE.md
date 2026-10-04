@@ -14,9 +14,10 @@ At the end of the session, write a log to `../Memory/AI/sessions/YYYY-MM-DD-clau
 - **The corpora are the contract.** `__tests__/fixtures/*-lines.ts` hold real
   list lines with the outcome a user wants. A behaviour change lands as a
   fixture first: add the failing real line, then the smallest fix. `KNOWN_GAPS`
-  only shrinks — never add a line to it to make a change pass, and never relax
-  a corpus threshold (travel 0 correct → wrong, dining 0 wrong / 0 over-claim,
-  food ≥ 85 %) without the user saying so.
+  only shrinks — the corpus tests cap it (travel ≤ 9, dining ≤ 22); when a
+  fix closes a gap, lower the cap with it. Never add a line to it to make a
+  change pass, and never relax a corpus threshold (travel 0 correct → wrong,
+  dining 0 wrong / 0 over-claim, food ≥ 97 %) without the user saying so.
 - **Deterministic, no LLM.** Same line → same patch. The only network read is
   DuckDuckGo's first-result page through the injected `Resolver`; everything
   else is local code and the bundled tables.

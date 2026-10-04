@@ -42,6 +42,7 @@ import {
   lookupsForTags,
   runLookups,
   type Lookup,
+  type LookupInput,
 } from 'rn-lookup-kit'
 import { createDiningLookup } from 'rn-lookup-kit/dining'
 import { exerciseLookup } from 'rn-lookup-kit/exercise'
@@ -60,17 +61,23 @@ const LOOKUPS: Lookup[] = [
   createDiningLookup({ resolver }), // after travel: its link wins
 ]
 
+// Your list item: what a lookup reads, plus the note it may extend.
+type Item = LookupInput & { note: string | null }
+
 // Lookups are keyed by the *list's* tags (travel, food, gym, restaurants…).
-const lookups = lookupsForTags({ lookups: LOOKUPS, listTags: ['travel'] })
-const result = await runLookups({ lookups, item }) // item: { text, tags, link, checked? }
-if (result !== 'no-match') {
-  const { note, link } = applyLookupPatch({ item, patch: result })
-  // write note/link (and download result.image) the app's own way
+export const lookUp = async (item: Item, listTags: string[]) => {
+  const lookups = lookupsForTags({ lookups: LOOKUPS, listTags })
+  const result = await runLookups({ lookups, item })
+  if (result === 'no-match') return null
+  // Write note/link (and download result.image) the app's own way.
+  return applyLookupPatch({ item, patch: result })
 }
 ```
 
 `applyLookupPatch` never replaces user text or a user link; a note line the
-lookup owns (`Lookup.owns`) is replaced in place on a re-run.
+lookup owns (`Lookup.owns`) is replaced in place on a re-run. This block is
+`examples/readme.ts`, type-checked by `bun run typecheck` and kept equal to
+the README by a test.
 
 ### The resolver contract
 
@@ -102,24 +109,35 @@ lookup owns (`Lookup.owns`) is replaced in place on a re-run.
 
 ```js
 // jest.config.js
-transformIgnorePatterns: [
-  // jest-expo's two defaults, then the kit's built CJS: it needs no
-  // transform, and Babel helpers injected into it don't resolve.
-  '/node_modules/(?!(.pnpm|react-native|@react-native|@react-native-community|expo|@expo|@expo-google-fonts|react-navigation|@react-navigation|@sentry/react-native|native-base))',
-  '/node_modules/react-native-reanimated/plugin/',
-  'rn-lookup-kit/dist/',
-],
-moduleNameMapper: {
-  // Jest's resolver here skips package `exports` subpaths; Metro reads them.
-  // Needed by /travel and /dining.
-  '^chrono-node/en$': '<rootDir>/node_modules/chrono-node/dist/cjs/locales/en',
-},
+const { dirname } = require('path')
+
+// The chrono-node the kit itself resolves (not whichever copy is hoisted).
+const kitChrono = require.resolve('chrono-node/en', {
+  paths: [dirname(require.resolve('rn-lookup-kit/package.json'))],
+})
+
+module.exports = {
+  transformIgnorePatterns: [
+    // jest-expo's two defaults already skip a github: install of the kit.
+    '/node_modules/(?!(.pnpm|react-native|@react-native|@react-native-community|expo|@expo|@expo-google-fonts|react-navigation|@react-navigation|@sentry/react-native|native-base))',
+    '/node_modules/react-native-reanimated/plugin/',
+    // Defensive: a file:/symlinked kit resolves outside node_modules, and
+    // Babel helpers injected into its built CJS don't resolve (ADR-012).
+    'rn-lookup-kit/dist/',
+  ],
+  moduleNameMapper: {
+    // Jest (and Vite) miss chrono-node's `./*` pattern export. Needed by
+    // /travel and /dining.
+    '^chrono-node/en$': kitChrono,
+  },
+}
 ```
 
-- Subpaths resolve through `exports` (Metro, TypeScript `bundler`/`node16`,
-  Jest 29) **and** through stub folders (`travel/package.json`…) for
-  resolvers that ignore `exports`. No mapper is needed for the kit itself —
-  only chrono-node's `./*` pattern export trips Jest (and Vite).
+- The kit's subpaths resolve through `exports` (Metro, TypeScript
+  `bundler`/`node16`, Jest 29) and through stub folders
+  (`travel/package.json`…) for resolvers that ignore `exports`. No mapper is
+  needed for the kit itself: Jest and Vite miss only chrono-node's `./*`
+  pattern export.
 - A tag bump needs `bun install` in each consumer; on the branch you ship
   from, `bun install --frozen-lockfile` before any `eas update` (a stale
   `node_modules` fails the export with "Unable to resolve module").
@@ -150,7 +168,7 @@ bun run format:check
 
 The corpora under `__tests__/fixtures/` are the contract: travel 537 lines
 (9 known gaps), dining 305 lines (never wrong, never over-claims), food 259
-lines (≥ 85 % matched), exercise 329 lines, booking details at two reference
+lines (≥ 97 % matched), exercise 329 lines, booking details at two reference
 dates. See `CLAUDE.md` before changing behaviour.
 
 Data tables are rebuilt with `bun run build:foods | build:airports |

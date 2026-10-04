@@ -24,10 +24,10 @@ describe('exercises dataset', () => {
     expect(EXERCISES.length).toBeLessThanOrEqual(250)
   })
 
-  it('stays within the 60 KB budget', () => {
+  it('stays within the 64 KB budget', () => {
     const file = join(__dirname, '..', 'src', 'exercise', 'exercises.json')
     const bytes = Buffer.byteLength(readFileSync(file, 'utf8'), 'utf8')
-    expect(bytes).toBeLessThanOrEqual(60 * 1024)
+    expect(bytes).toBeLessThanOrEqual(64 * 1024)
   })
 
   it('has lowercase, trimmed names and aliases', () => {
