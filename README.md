@@ -103,8 +103,10 @@ lookup owns (`Lookup.owns`) is replaced in place on a re-run.
 ```js
 // jest.config.js
 transformIgnorePatterns: [
-  // jest-expo's default list, plus the kit's built CJS (already plain JS)
-  'node_modules/(?!(...|rn-lookup-kit))',
+  // jest-expo's two defaults, then the kit's built CJS: it needs no
+  // transform, and Babel helpers injected into it don't resolve.
+  '/node_modules/(?!(.pnpm|react-native|@react-native|@react-native-community|expo|@expo|@expo-google-fonts|react-navigation|@react-navigation|@sentry/react-native|native-base))',
+  '/node_modules/react-native-reanimated/plugin/',
   'rn-lookup-kit/dist/',
 ],
 moduleNameMapper: {
@@ -114,9 +116,10 @@ moduleNameMapper: {
 },
 ```
 
-- Subpaths resolve through `exports` (Metro, TypeScript `bundler`/`node16`)
-  **and** through stub folders (`travel/package.json`…) for jest-expo, which
-  ignores `exports`. No mapper is needed for the kit itself.
+- Subpaths resolve through `exports` (Metro, TypeScript `bundler`/`node16`,
+  Jest 29) **and** through stub folders (`travel/package.json`…) for
+  resolvers that ignore `exports`. No mapper is needed for the kit itself —
+  only chrono-node's `./*` pattern export trips Jest (and Vite).
 - A tag bump needs `bun install` in each consumer; on the branch you ship
   from, `bun install --frozen-lockfile` before any `eas update` (a stale
   `node_modules` fails the export with "Unable to resolve module").

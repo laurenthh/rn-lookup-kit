@@ -78,8 +78,8 @@ describe('entry points', () => {
     )
   })
 
-  // jest-expo's resolver ignores `exports`; a stub package.json per entry
-  // makes `rn-lookup-kit/travel` resolve there too.
+  // For resolvers that ignore `exports`, a stub package.json per entry
+  // makes `rn-lookup-kit/travel` resolve too.
   it.each(ENTRIES)('%s has a stub dir matching its exports entry', (entry) => {
     expect(readJson(`${entry}/package.json`)).toEqual({
       main: `../dist/${entry}/index.js`,

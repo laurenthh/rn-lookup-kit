@@ -35,7 +35,7 @@ At the end of the session, write a log to `../Memory/AI/sessions/YYYY-MM-DD-clau
   except the root re-exporting core). Folder DAG `core ← places ← dining ←
   travel`, `food`/`exercise` use `core` only — `lookups-boundary.test.ts`
   enforces it. A new entry needs the `exports` map, a stub dir
-  (`<entry>/package.json`, for jest-expo) and `files`.
+  (`<entry>/package.json`, for resolvers that ignore `exports`) and `files`.
 - Build is `tsc` (Node16 → CommonJS); the JSON tables ride into `dist/`
   through `resolveJsonModule`. `dist/` is not committed — `prepare` builds it
   on install.
