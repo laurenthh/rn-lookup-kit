@@ -1,0 +1,302 @@
+[
+  {
+    "shape": "opentable",
+    "name": "Carbone",
+    "city": "New York",
+    "region": "US",
+    "query": "site:opentable.com Carbone New York",
+    "status": 200,
+    "finalUrl": "https://duckduckgo.com/?q=%5Csite%3Aopentable.com%20Carbone%20New%20York",
+    "target": "https://www.opentable.com/r/carbone"
+  },
+  {
+    "shape": "plain",
+    "name": "Carbone",
+    "city": "New York",
+    "region": "US",
+    "query": "Carbone New York",
+    "status": 200,
+    "finalUrl": "https://duckduckgo.com/?q=%5CCarbone%20New%20York",
+    "target": "https://carbonenewyork.com/"
+  },
+  {
+    "shape": "opentable",
+    "name": "Alinea",
+    "city": "Chicago",
+    "region": "US",
+    "query": "site:opentable.com Alinea Chicago",
+    "status": 200,
+    "finalUrl": "https://duckduckgo.com/?q=%5Csite%3Aopentable.com%20Alinea%20Chicago",
+    "target": "https://www.opentable.com/r/alinea"
+  },
+  {
+    "shape": "plain",
+    "name": "Alinea",
+    "city": "Chicago",
+    "region": "US",
+    "query": "Alinea Chicago",
+    "status": 200,
+    "finalUrl": "https://duckduckgo.com/?q=%5CAlinea%20Chicago",
+    "target": "https://www.alinearestaurant.com/"
+  },
+  {
+    "shape": "opentable",
+    "name": "The French Laundry",
+    "city": "Yountville",
+    "region": "US",
+    "query": "site:opentable.com The French Laundry Yountville",
+    "status": 200,
+    "finalUrl": "https://duckduckgo.com/?q=%5Csite%3Aopentable.com%20The%20French%20Laundry%20Yountville",
+    "target": "https://www.opentable.com/r/the-french-laundry"
+  },
+  {
+    "shape": "plain",
+    "name": "The French Laundry",
+    "city": "Yountville",
+    "region": "US",
+    "query": "The French Laundry Yountville",
+    "status": 200,
+    "finalUrl": "https://duckduckgo.com/?q=%5CThe%20French%20Laundry%20Yountville",
+    "target": "https://thomaskeller-reservation.com/"
+  },
+  {
+    "shape": "opentable",
+    "name": "Le Bernardin",
+    "city": "New York",
+    "region": "US",
+    "query": "site:opentable.com Le Bernardin New York",
+    "status": 200,
+    "finalUrl": "https://duckduckgo.com/?q=%5Csite%3Aopentable.com%20Le%20Bernardin%20New%20York",
+    "target": "https://www.opentable.com/r/le-bernardin"
+  },
+  {
+    "shape": "plain",
+    "name": "Le Bernardin",
+    "city": "New York",
+    "region": "US",
+    "query": "Le Bernardin New York",
+    "status": 200,
+    "finalUrl": "https://duckduckgo.com/?q=%5CLe%20Bernardin%20New%20York",
+    "target": "https://www.le-bernardin.com/"
+  },
+  {
+    "shape": "opentable",
+    "name": "Dishoom Covent Garden",
+    "city": "London",
+    "region": "UK",
+    "query": "site:opentable.com Dishoom Covent Garden London",
+    "status": 200,
+    "finalUrl": "https://duckduckgo.com/?q=%5Csite%3Aopentable.com%20Dishoom%20Covent%20Garden%20London",
+    "target": "https://www.opentable.com/r/dishoom-kensington-london"
+  },
+  {
+    "shape": "plain",
+    "name": "Dishoom Covent Garden",
+    "city": "London",
+    "region": "UK",
+    "query": "Dishoom Covent Garden London",
+    "status": 200,
+    "finalUrl": "https://duckduckgo.com/?q=%5CDishoom%20Covent%20Garden%20London",
+    "target": "https://www.dishoom.com/covent-garden/"
+  },
+  {
+    "shape": "opentable",
+    "name": "Hawksmoor Spitalfields",
+    "city": "London",
+    "region": "UK",
+    "query": "site:opentable.com Hawksmoor Spitalfields London",
+    "status": 200,
+    "finalUrl": "https://duckduckgo.com/?q=%5Csite%3Aopentable.com%20Hawksmoor%20Spitalfields%20London",
+    "target": "https://www.opentable.com/hawksmoor-spitalfields"
+  },
+  {
+    "shape": "plain",
+    "name": "Hawksmoor Spitalfields",
+    "city": "London",
+    "region": "UK",
+    "query": "Hawksmoor Spitalfields London",
+    "status": 200,
+    "finalUrl": "https://duckduckgo.com/?q=%5CHawksmoor%20Spitalfields%20London",
+    "target": "https://thehawksmoor.com/locations/spitalfields/"
+  },
+  {
+    "shape": "opentable",
+    "name": "Septime",
+    "city": "Paris",
+    "region": "FR",
+    "query": "site:opentable.com Septime Paris",
+    "status": 200,
+    "finalUrl": "https://duckduckgo.com/?q=%5Csite%3Aopentable.com%20Septime%20Paris",
+    "target": "https://www.opentable.com/metro/fr/paris-restaurants"
+  },
+  {
+    "shape": "plain",
+    "name": "Septime",
+    "city": "Paris",
+    "region": "FR",
+    "query": "Septime Paris",
+    "status": 200,
+    "finalUrl": "https://duckduckgo.com/?q=%5CSeptime%20Paris",
+    "target": "https://septime-charonne.fr/en/"
+  },
+  {
+    "shape": "opentable",
+    "name": "Noma",
+    "city": "Copenhagen",
+    "region": "DK",
+    "query": "site:opentable.com Noma Copenhagen",
+    "status": 200,
+    "finalUrl": "https://duckduckgo.com/?q=%5Csite%3Aopentable.com%20Noma%20Copenhagen",
+    "target": "https://www.opentable.com/region/denmark/copenhagen"
+  },
+  {
+    "shape": "plain",
+    "name": "Noma",
+    "city": "Copenhagen",
+    "region": "DK",
+    "query": "Noma Copenhagen",
+    "status": 200,
+    "finalUrl": "https://duckduckgo.com/?q=%5CNoma%20Copenhagen",
+    "target": "https://noma.dk/"
+  },
+  {
+    "shape": "opentable",
+    "name": "Osteria Francescana",
+    "city": "Modena",
+    "region": "IT",
+    "query": "site:opentable.com Osteria Francescana Modena",
+    "status": 200,
+    "finalUrl": "https://duckduckgo.com/?q=%5Csite%3Aopentable.com%20Osteria%20Francescana%20Modena",
+    "target": "https://www.opentable.com/r/osteria-ruggera-modena"
+  },
+  {
+    "shape": "plain",
+    "name": "Osteria Francescana",
+    "city": "Modena",
+    "region": "IT",
+    "query": "Osteria Francescana Modena",
+    "status": 200,
+    "finalUrl": "https://duckduckgo.com/?q=%5COsteria%20Francescana%20Modena",
+    "target": "https://osteriafrancescana.it/"
+  },
+  {
+    "shape": "opentable",
+    "name": "Tickets",
+    "city": "Barcelona",
+    "region": "ES",
+    "query": "site:opentable.com Tickets Barcelona",
+    "status": 200,
+    "finalUrl": "https://duckduckgo.com/?q=%5Csite%3Aopentable.com%20Tickets%20Barcelona",
+    "target": "https://www.opentable.com/metro/barcelona-restaurants"
+  },
+  {
+    "shape": "plain",
+    "name": "Tickets",
+    "city": "Barcelona",
+    "region": "ES",
+    "query": "Tickets Barcelona",
+    "status": 200,
+    "finalUrl": "https://duckduckgo.com/?q=%5CTickets%20Barcelona",
+    "target": "https://www.fcbarcelona.com/en/tickets/football"
+  },
+  {
+    "shape": "opentable",
+    "name": "Kikunoi",
+    "city": "Kyoto",
+    "region": "JP",
+    "query": "site:opentable.com Kikunoi Kyoto",
+    "status": 200,
+    "finalUrl": "https://duckduckgo.com/?q=%5Csite%3Aopentable.com%20Kikunoi%20Kyoto",
+    "target": "https://www.opentable.com/metro/kyoto-restaurants"
+  },
+  {
+    "shape": "plain",
+    "name": "Kikunoi",
+    "city": "Kyoto",
+    "region": "JP",
+    "query": "Kikunoi Kyoto",
+    "status": 200,
+    "finalUrl": "https://duckduckgo.com/?q=%5CKikunoi%20Kyoto",
+    "target": "https://kikunoi.jp/en/"
+  },
+  {
+    "shape": "opentable",
+    "name": "Narisawa",
+    "city": "Tokyo",
+    "region": "JP",
+    "query": "site:opentable.com Narisawa Tokyo",
+    "status": 200,
+    "finalUrl": "https://duckduckgo.com/?q=%5Csite%3Aopentable.com%20Narisawa%20Tokyo",
+    "target": "https://guestcenter.opentable.com/restaurant/1508053/inventory"
+  },
+  {
+    "shape": "plain",
+    "name": "Narisawa",
+    "city": "Tokyo",
+    "region": "JP",
+    "query": "Narisawa Tokyo",
+    "status": 200,
+    "finalUrl": "https://duckduckgo.com/?q=%5CNarisawa%20Tokyo",
+    "target": "https://guide.michelin.com/en/tokyo-region/tokyo/restaurant/narisawa"
+  },
+  {
+    "shape": "opentable",
+    "name": "Ichiran",
+    "city": "Shibuya",
+    "region": "JP",
+    "query": "site:opentable.com Ichiran Shibuya",
+    "status": 200,
+    "finalUrl": "https://duckduckgo.com/?q=%5Csite%3Aopentable.com%20Ichiran%20Shibuya",
+    "target": "https://www.opentable.com/metro/tokyo-restaurants"
+  },
+  {
+    "shape": "plain",
+    "name": "Ichiran",
+    "city": "Shibuya",
+    "region": "JP",
+    "query": "Ichiran Shibuya",
+    "status": 200,
+    "finalUrl": "https://duckduckgo.com/?q=%5CIchiran%20Shibuya",
+    "target": "https://www.tripadvisor.com/Restaurant_Review-g1066456-d1688898-Reviews-Ichiran_Shibuya-Shibuya_Tokyo_Tokyo_Prefecture_Kanto.html"
+  },
+  {
+    "shape": "opentable",
+    "name": "Quay",
+    "city": "Sydney",
+    "region": "AU",
+    "query": "site:opentable.com Quay Sydney",
+    "status": 200,
+    "finalUrl": "https://duckduckgo.com/?q=%5Csite%3Aopentable.com%20Quay%20Sydney",
+    "target": "https://www.opentable.com/neighborhood/n/sydney-nsw/circular-quay-restaurants"
+  },
+  {
+    "shape": "plain",
+    "name": "Quay",
+    "city": "Sydney",
+    "region": "AU",
+    "query": "Quay Sydney",
+    "status": 200,
+    "finalUrl": "https://duckduckgo.com/?q=%5CQuay%20Sydney",
+    "target": "https://finkgroup.com.au/a-farewell-to-quay/"
+  },
+  {
+    "shape": "opentable",
+    "name": "Attica",
+    "city": "Melbourne",
+    "region": "AU",
+    "query": "site:opentable.com Attica Melbourne",
+    "status": 200,
+    "finalUrl": "https://duckduckgo.com/?q=%5Csite%3Aopentable.com%20Attica%20Melbourne",
+    "target": "https://www.opentable.com/r/attica-ripponlea"
+  },
+  {
+    "shape": "plain",
+    "name": "Attica",
+    "city": "Melbourne",
+    "region": "AU",
+    "query": "Attica Melbourne",
+    "status": 200,
+    "finalUrl": "https://duckduckgo.com/?q=%5CAttica%20Melbourne",
+    "target": "https://www.attica.com.au/"
+  }
+]
