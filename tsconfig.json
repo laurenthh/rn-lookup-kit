@@ -1,0 +1,26 @@
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    // Node16 rather than the legacy "CommonJS"/"Node" pair (deprecated, an
+    // error on TypeScript 7): consumers install from a git tag, where
+    // `prepare` runs whatever tsc the consumer resolves. With no "type" field
+    // in package.json, Node16 emits CommonJS (ADR-012 gotcha 2).
+    "module": "Node16",
+    "moduleResolution": "Node16",
+    "lib": ["ES2022", "DOM"],
+    "strict": true,
+    "noUncheckedIndexedAccess": true,
+    "noImplicitOverride": true,
+    "exactOptionalPropertyTypes": true,
+    "declaration": true,
+    // The data tables (*.json) are imported by their TS wrappers, so tsc
+    // copies them into dist/ — no copy step.
+    "resolveJsonModule": true,
+    "outDir": "dist",
+    "rootDir": "src",
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true
+  },
+  "include": ["src"]
+}

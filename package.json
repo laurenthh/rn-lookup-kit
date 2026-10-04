@@ -1,0 +1,63 @@
+{
+  "name": "rn-lookup-kit",
+  "version": "1.0.0",
+  "description": "Deterministic item lookups for the copilot apps: travel and booking links, restaurant tables, food macros and exercise targets from a free-text list line. No LLM, no React Native imports, one runtime dependency (chrono-node).",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/laurenthh/rn-lookup-kit.git"
+  },
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    },
+    "./travel": {
+      "types": "./dist/travel/index.d.ts",
+      "default": "./dist/travel/index.js"
+    },
+    "./dining": {
+      "types": "./dist/dining/index.d.ts",
+      "default": "./dist/dining/index.js"
+    },
+    "./food": {
+      "types": "./dist/food/index.d.ts",
+      "default": "./dist/food/index.js"
+    },
+    "./exercise": {
+      "types": "./dist/exercise/index.d.ts",
+      "default": "./dist/exercise/index.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "dist",
+    "travel",
+    "dining",
+    "food",
+    "exercise"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "prepare": "npm run build",
+    "typecheck": "tsc --noEmit && tsc -p tsconfig.test.json",
+    "test": "vitest run",
+    "test:tz": "TEST_TZ=Australia/Perth vitest run __tests__/booking-details.test.ts __tests__/travel.test.ts && TEST_TZ=Pacific/Kiritimati vitest run __tests__/booking-details.test.ts __tests__/travel.test.ts",
+    "format": "prettier --write \"**/*.ts\"",
+    "format:check": "prettier --check \"**/*.ts\"",
+    "build:foods": "bun scripts/build-foods.ts",
+    "build:exercises": "bun scripts/build-exercises.ts",
+    "build:airports": "bun scripts/build-airports.ts"
+  },
+  "dependencies": {
+    "chrono-node": "^2.10.2"
+  },
+  "devDependencies": {
+    "@types/node": "^22.15.0",
+    "prettier": "^3.8.4",
+    "typescript": "~5.9.3",
+    "vitest": "^4.1.11"
+  }
+}

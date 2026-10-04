@@ -1,0 +1,4 @@
+{
+  "main": "../dist/dining/index.js",
+  "types": "../dist/dining/index.d.ts"
+}

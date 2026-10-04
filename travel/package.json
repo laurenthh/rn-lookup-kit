@@ -1,0 +1,4 @@
+{
+  "main": "../dist/travel/index.js",
+  "types": "../dist/travel/index.d.ts"
+}

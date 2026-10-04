@@ -1,0 +1,13 @@
+{
+  // Type-checks tests, scripts and config the way they are run (Vitest and
+  // Bun bundle-style resolution); never emits.
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
+    "noEmit": true,
+    "rootDir": ".",
+    "types": ["node"]
+  },
+  "include": ["src", "__tests__", "scripts", "vitest.config.ts"]
+}
