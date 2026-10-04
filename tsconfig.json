@@ -13,8 +13,7 @@
     "noImplicitOverride": true,
     "exactOptionalPropertyTypes": true,
     "declaration": true,
-    // The data tables (*.json) are imported by their TS wrappers, so tsc
-    // copies them into dist/ — no copy step.
+    // The data tables (*.json) ride into dist/ through tsc — no copy step.
     "resolveJsonModule": true,
     "outDir": "dist",
     "rootDir": "src",
@@ -22,5 +21,8 @@
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true
   },
-  "include": ["src"]
+  // The JSON is listed, not only imported: a consumer's `prepare` builds
+  // inside node_modules/, where tsc treats JSON reached by import as an
+  // external library file and never emits it.
+  "include": ["src", "src/**/*.json"]
 }
