@@ -1,0 +1,4 @@
+{
+  "main": "../dist/airports/index.js",
+  "types": "../dist/airports/index.d.ts"
+}

@@ -1,6 +1,5 @@
-export { airportFor } from '../places/airports'
+export { airportCity, airportFor } from '../places/airports'
 export {
-  airportCity,
   createTravelLookup,
   travelIntent,
   type IsGrocery,

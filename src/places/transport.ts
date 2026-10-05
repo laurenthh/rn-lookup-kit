@@ -1,3 +1,4 @@
+import { DATE_WORDS } from './dateWords'
 import { stripWhen } from './noise'
 import { isStayName } from './stays'
 
@@ -208,12 +209,6 @@ const GROUND_LEAD = new RegExp(
 )
 // "JL5", "NH 880", "U2 8341": capitals, never "#AB123", "Gate B12", "A380".
 const FLIGHT_NUMBER = '(?:[A-Z]{2}|[A-Z]\\d|\\d[A-Z])\\s?\\d{1,4}\\b'
-// Shared with travel.ts's airport-code boundary check (21c stage 2): a
-// weekday/month word, matched with a trailing `[a-z]*` so the short forms
-// here also cover "Monday", "January"...
-export const DATE_WORDS =
-  'mon|tue|wed|thu|fri|sat|sun|' +
-  'jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec'
 const NOT_A_DATE = `(?!\\s*(?:\\d|${DATE_WORDS})[a-z]*\\b)`
 const FLIGHT_NUMBER_LEAD = new RegExp(
   `^(?:(?:[Bb]ook|[Rr]eserve|[Tt]ake|[Cc]atch)\\s+)?(?:[Ff]light\\s+)?` +

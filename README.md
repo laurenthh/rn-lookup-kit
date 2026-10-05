@@ -25,10 +25,14 @@ carries no data.
 | Import | What | Data |
 |---|---|---|
 | `rn-lookup-kit` | types, `createResolver`, registry helpers (`lookupsForTags`, `applicableLookups`, `lookupLabel`, `runLookups`), note merging (`applyLookupPatch`, `mergeNoteLine`, `lineOwner`), link recognisers (`lookupLinkKind`, `isLookupLink`, `linkHref`, `parseLink`), link builders (`bookingSearchLink`, `flightsSearchLink`), `PACE_GAP` | none |
-| `rn-lookup-kit/travel` | `createTravelLookup`, `travelIntent` — places, stays, check-in/booking pages, flights, transport; `airportFor`, `airportCity` | airports (57 KB) + chrono-node |
+| `rn-lookup-kit/airports` | `airportFor`, `airportCity` — IATA code → city, nothing else | airports (57 KB) |
+| `rn-lookup-kit/travel` | `createTravelLookup`, `travelIntent` — places, stays, check-in/booking pages, flights, transport; also re-exports `airportFor`, `airportCity` | airports (57 KB) + chrono-node |
 | `rn-lookup-kit/dining` | `createDiningLookup`, `diningIntent` — "book a table" → OpenTable / official site / Maps | airports + chrono-node (shared `places/`) |
 | `rn-lookup-kit/food` | `foodLookup`, `isFood`, `resolveFood` — calories and macros for a food line | USDA foods (168 KB) |
 | `rn-lookup-kit/exercise` | `exerciseLookup`, `exerciseFor`, `parsePlanLine`, `formatPlan` — muscles and the plan line | free-exercise-db (60 KB) |
+
+Use `/airports` if you only need airport names: no chrono mapper needed, and
+none of `/travel`'s dining, places or date-parsing code in the bundle.
 
 Everything else is internal; the tests reach it through deep paths, apps must
 not.
@@ -105,7 +109,7 @@ rather than a free-text line. No network, no clock, plain fields in.
 
 ```ts
 import { bookingSearchLink, flightsSearchLink } from 'rn-lookup-kit'
-import { airportCity } from 'rn-lookup-kit/travel'
+import { airportCity } from 'rn-lookup-kit/airports'
 
 // A hotel record: Booking.com's search on its nights, for the party.
 const hotelLink = bookingSearchLink({
@@ -153,7 +157,7 @@ the README like the usage example.
   Batumi). `airportCity(field)` is the one for a location field: only a
   leading upper-case code, bounded by nothing, punctuation, a digit or a
   day/month word (`"KIX"`, `"KIX, 12 Oct"`), and never `USA`. Both come
-  from `/travel`, which carries the table.
+  from `/airports` (the table and nothing else); `/travel` re-exports them.
 - No Maps builder: a search link is one `encodeURIComponent` away, and a
   record with coordinates wants a `query=lat,lng` the kit doesn't build.
 
@@ -186,7 +190,7 @@ module.exports = {
   ],
   moduleNameMapper: {
     // Jest (and Vite) miss chrono-node's `./*` pattern export. Needed by
-    // /travel and /dining.
+    // /travel and /dining, not /airports.
     '^chrono-node/en$': kitChrono,
   },
 }
