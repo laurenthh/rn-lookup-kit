@@ -2,7 +2,6 @@ import { describe, expect, it } from 'vitest'
 import { existsSync, readFileSync } from 'fs'
 import { dirname, join, relative, resolve } from 'path'
 import { airportCity as airportCityAirports, airportFor } from '../src/airports'
-import { airportCity as airportCityTravel } from '../src/travel'
 import * as travelEntry from '../src/travel'
 import * as airportsEntry from '../src/airports'
 
@@ -94,7 +93,7 @@ describe('the airports entry', () => {
   it('is the same pair /travel re-exports', () => {
     expect(travelEntry.airportCity).toBe(airportCityAirports)
     expect(travelEntry.airportFor).toBe(airportFor)
-    expect(airportCityTravel('KIX, 12 Oct')).toBe('Osaka')
+    expect(travelEntry.airportCity('KIX, 12 Oct')).toBe('Osaka')
   })
 
   it('keeps airportCity behaviour from this entry', () => {

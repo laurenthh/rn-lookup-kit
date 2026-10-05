@@ -25,7 +25,7 @@ export const airportCities = (): ReadonlySet<string> =>
 // Marathon", "THE Hague" fail this and are never read as codes, but
 // "SFO-Oakland", "NYC!", "KIX, 12 Oct" pass. An unknown code (`airportFor`
 // returns null) is treated the same as an untyped side: the plan only
-// says what a *known* code adds. Public (`/travel`): the city to show under
+// says what a *known* code adds. Public (`/airports`, re-exported by `/travel`): the city to show under
 // a location field, case-sensitive so a typed "bus" or "the" is no code.
 const CODE_PREFIX = /^([A-Z]{3})\b/
 // No `[a-z]*` tail on the word branch: with one, "mar" would also open
