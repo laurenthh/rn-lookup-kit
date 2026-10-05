@@ -1,6 +1,6 @@
 {
   "name": "rn-lookup-kit",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "description": "Deterministic item lookups for the copilot apps: travel and booking links, restaurant tables, food macros and exercise targets from a free-text list line. No LLM, no React Native imports, one runtime dependency (chrono-node).",
   "license": "MIT",
   "repository": {
@@ -13,6 +13,10 @@
     ".": {
       "types": "./dist/index.d.ts",
       "default": "./dist/index.js"
+    },
+    "./airports": {
+      "types": "./dist/airports/index.d.ts",
+      "default": "./dist/airports/index.js"
     },
     "./travel": {
       "types": "./dist/travel/index.d.ts",
@@ -34,6 +38,7 @@
   },
   "files": [
     "dist",
+    "airports",
     "travel",
     "dining",
     "food",

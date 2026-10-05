@@ -5,11 +5,12 @@ import { preProcessFile } from 'typescript'
 
 const ROOT = join(__dirname, '..')
 const SRC = join(ROOT, 'src')
-const ENTRIES = ['travel', 'dining', 'food', 'exercise']
+const ENTRIES = ['airports', 'travel', 'dining', 'food', 'exercise']
 // What each folder may import; travel uses dining, both share places.
 const ALLOWED: Record<string, string[]> = {
   core: ['core'],
   places: ['core', 'places'],
+  airports: ['places', 'airports'],
   dining: ['core', 'places', 'dining'],
   travel: ['core', 'places', 'dining', 'travel'],
   food: ['core', 'food'],

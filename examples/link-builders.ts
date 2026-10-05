@@ -1,5 +1,5 @@
 import { bookingSearchLink, flightsSearchLink } from 'rn-lookup-kit'
-import { airportCity } from 'rn-lookup-kit/travel'
+import { airportCity } from 'rn-lookup-kit/airports'
 
 // A hotel record: Booking.com's search on its nights, for the party.
 const hotelLink = bookingSearchLink({
