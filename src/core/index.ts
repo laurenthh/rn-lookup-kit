@@ -1,3 +1,10 @@
+export {
+  bookingSearchLink,
+  flightsSearchLink,
+  type BookingSearch,
+  type FlightSearch,
+  type StayParty,
+} from './build'
 export { isLookupLink, linkHref, lookupLinkKind, parseLink } from './link'
 export { applyLookupPatch, lineOwner, mergeNoteLine } from './note'
 export {

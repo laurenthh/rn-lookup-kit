@@ -9,6 +9,14 @@ import {
   ROOMS_SOURCE,
   WEEKDAY_SOURCE,
 } from '../places/noise'
+import {
+  MAX_CHILDREN,
+  MAX_NIGHTS,
+  MAX_PEOPLE,
+  nightsBetween,
+  within,
+  ymd,
+} from '../core/stay'
 
 // Dates and party typed on a booking line. Pure: `now` is the tap time.
 
@@ -57,10 +65,6 @@ const ONE_NIGHT = /\bfor\s+the\s+night\b/i
 // "3 days" (2 nights or 3?), "the night before", "over Christmas".
 const UNSURE_DURATION = /\bdays?\b|\bbefore\b|\bafter\b|\b(?:for|over)\s/i
 
-const MAX_PEOPLE = 30
-const MAX_CHILDREN = 10
-// Booking.com caps a stay at 30 nights.
-const MAX_NIGHTS = 30
 // A date without a year this recently past is a slip, not next year's.
 const RECENT_DAYS = 30
 // A range end read into the next month ("31 Oct - 2") stays short.
@@ -117,28 +121,15 @@ const localDate = (year: number, month: number, day: number) => {
   return date.getMonth() === month && date.getDate() === day ? date : null
 }
 
-const ymd = (day: string): [number, number, number] => {
-  const [year = 0, month = 1, date = 1] = day.split('-').map(Number)
-  return [year, month - 1, date]
-}
-
 const addDays = (day: string, count: number) => {
   const [year, month, date] = ymd(day)
   return iso(new Date(year, month, date + count, 12))
 }
 
-export const nightsBetween = (checkIn: string, checkOut: string) =>
-  Math.round(
-    (Date.UTC(...ymd(checkOut)) - Date.UTC(...ymd(checkIn))) / 86_400_000,
-  )
-
 const count = (word: string) => {
   const value = /^\d+$/.test(word) ? Number(word) : NUMBER_WORDS[word]
   return value === undefined ? null : value
 }
-
-const within = (value: number | null, max: number, min = 1) =>
-  value !== null && value >= min && value <= max ? value : null
 
 // The first clause, with what `cleanLine` drops held aside as `noise`.
 const firstClause = (text: string) => {
