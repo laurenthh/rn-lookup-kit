@@ -68,15 +68,29 @@ describe('bookingSearchLink', () => {
     )
   })
 
+  it('keeps Booking.com limits and at least one adult per room', () => {
+    const link = (party: object) =>
+      bookingSearchLink({ query: 'Osaka', ...NIGHTS, ...party })
+
+    expect(link({ adults: 30, children: 10, rooms: 30 })).toContain(
+      'group_adults=30&no_rooms=30&group_children=10',
+    )
+    // Fewer adults than rooms: the default party for those rooms.
+    expect(link({ adults: 1, rooms: 3 })).toContain('group_adults=3&no_rooms=3')
+    expect(link({ adults: 2, rooms: 2 })).toContain('group_adults=2&no_rooms=2')
+  })
+
   it('falls back to the default party for a count out of range', () => {
     for (const party of [
       { adults: 0 },
       { adults: -1 },
       { adults: 2.5 },
       { adults: Number.NaN },
-      { adults: 10_000 },
+      { adults: 31 },
       { rooms: 0 },
+      { rooms: 31 },
       { children: -1 },
+      { children: 11 },
     ]) {
       expect(bookingSearchLink({ query: 'Osaka', ...NIGHTS, ...party })).toBe(
         `${SEARCH}Osaka&${STAY}`,
@@ -111,6 +125,26 @@ describe('bookingSearchLink', () => {
     for (const [query, checkIn, checkOut] of cases) {
       expect(bookingSearchLink({ query, checkIn, checkOut })).toBeNull()
     }
+  })
+
+  it('is null for a missing field, not a throw', () => {
+    const missing = [null, undefined]
+    for (const value of missing) {
+      expect(bookingSearchLink({ ...NIGHTS, query: value })).toBeNull()
+      expect(
+        bookingSearchLink({ query: 'Osaka', ...NIGHTS, checkIn: value }),
+      ).toBeNull()
+      expect(
+        bookingSearchLink({ query: 'Osaka', ...NIGHTS, checkOut: value }),
+      ).toBeNull()
+    }
+    // An untyped JS caller.
+    const untyped = { query: 42, checkIn: 20261020, checkOut: {} }
+    expect(
+      bookingSearchLink(
+        untyped as unknown as Parameters<typeof bookingSearchLink>[0],
+      ),
+    ).toBeNull()
   })
 
   it('accepts exactly 30 nights, across a month and a year end', () => {
@@ -171,12 +205,17 @@ describe('flightsSearchLink', () => {
       { from: '' },
       { from: '  ' },
       { from: null },
+      { from: undefined },
+      { from: 5 as unknown as string },
+      { date: undefined },
+      { date: 20261005 as unknown as string },
       { date: '2026-02-30' },
       { date: '5 Oct' },
       { date: '2026-10-05T09:30' },
       { date: null },
       { adults: 0 },
       { adults: 1.5 },
+      { adults: 31 },
     ]) {
       expect(flightsSearchLink({ to: 'KIX', ...extra })).toBe(plain)
     }
@@ -184,6 +223,8 @@ describe('flightsSearchLink', () => {
 
   it('is null without a destination', () => {
     expect(flightsSearchLink({ to: '' })).toBeNull()
+    expect(flightsSearchLink({ to: null })).toBeNull()
+    expect(flightsSearchLink({ to: undefined, from: 'SYD' })).toBeNull()
     expect(flightsSearchLink({ from: 'SYD', to: '  ' })).toBeNull()
     expect(flightsSearchLink({ to: '\udc00' })).toBeNull()
   })
@@ -242,6 +283,7 @@ describe('airport lookups', () => {
       'XXX',
       '',
       null,
+      undefined,
     ]) {
       expect(airportCity(field)).toBeNull()
     }

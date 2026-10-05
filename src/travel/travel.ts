@@ -7,7 +7,6 @@ import {
 } from './booking'
 import {
   bookingDetails,
-  nightsBetween,
   partyDetails,
   type BookingDetails,
   type StayDates,
@@ -38,6 +37,7 @@ import type {
 } from '../core/types'
 import { linkPatch, type Resolver } from '../core/resolve'
 import { bookingQuery, flightsQuery, partyOrDefault } from '../core/build'
+import { nightsBetween } from '../core/stay'
 import {
   BOOKING_SEARCH_PREFIX,
   DIRECTIONS_LOOKUP_PREFIX,
@@ -103,8 +103,8 @@ const CODE_BOUNDARY = new RegExp(
 // MAR, SUN, DAD, BBQ...) stay — see Findings for why those are accepted.
 const CODE_STOPS = new Set(['USA'])
 
-export const airportCity = (side: string | null): string | null => {
-  if (side === null) {
+export const airportCity = (side: string | null | undefined): string | null => {
+  if (typeof side !== 'string') {
     return null
   }
   const trimmed = side.trim()

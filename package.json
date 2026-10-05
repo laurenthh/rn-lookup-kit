@@ -44,7 +44,7 @@
     "prepare": "npm run build",
     "typecheck": "tsc --noEmit && tsc -p tsconfig.test.json",
     "test": "vitest run",
-    "test:tz": "TEST_TZ=Australia/Perth vitest run __tests__/booking-details.test.ts __tests__/travel.test.ts __tests__/link-builders.test.ts && TEST_TZ=Pacific/Kiritimati vitest run __tests__/booking-details.test.ts __tests__/travel.test.ts __tests__/link-builders.test.ts",
+    "test:tz": "TEST_TZ=Australia/Perth vitest run __tests__/booking-details.test.ts __tests__/travel.test.ts && TEST_TZ=Pacific/Kiritimati vitest run __tests__/booking-details.test.ts __tests__/travel.test.ts",
     "format": "prettier --write \"**/*.ts\"",
     "format:check": "prettier --check \"**/*.ts\"",
     "build:foods": "bun scripts/build-foods.ts",

@@ -1,8 +1,20 @@
 import { BOOKING_SEARCH_PREFIX, FLIGHTS_LOOKUP_PREFIX } from './link'
+import {
+  isDay,
+  MAX_CHILDREN,
+  MAX_NIGHTS,
+  MAX_PEOPLE,
+  nightsBetween,
+  within,
+  ymd,
+} from './stay'
 
 // Links for an app that already has the fields (a hotel record, a flight
 // segment), not a free-text line. Each builds exactly the shape
-// `lookupLinkKind` recognises, so the travel lookup and these agree.
+// `lookupLinkKind` recognises. Every field may be missing: a record's
+// fields often are, and "no link" (null) is the answer, never a throw.
+
+type Field = string | null | undefined
 
 export type StayParty = {
   adults?: number | null | undefined
@@ -12,54 +24,26 @@ export type StayParty = {
 
 export type BookingSearch = StayParty & {
   // What Booking.com's search box gets: a hotel name, "name, city", a city.
-  query: string
+  query: Field
   // Local days, YYYY-MM-DD.
-  checkIn: string
-  checkOut: string
+  checkIn: Field
+  checkOut: Field
 }
 
 export type FlightSearch = {
   // An IATA code or a place name, as the user wrote it.
-  to: string
-  from?: string | null | undefined
+  to: Field
+  from?: Field
   // Local day of departure, YYYY-MM-DD.
-  date?: string | null | undefined
+  date?: Field
   adults?: number | null | undefined
 }
 
-// The recognisers read counts as 1–4 digits.
-const MAX_COUNT = 9999
-// Booking.com caps a stay at 30 nights (as the booking-line parser does).
-const MAX_NIGHTS = 30
-const DAY = /^(\d{4})-(\d{2})-(\d{2})$/
 const MONTHS = 'Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec'.split(' ')
 
-const countOf = (value: number | null | undefined, min: number) =>
-  typeof value === 'number' &&
-  Number.isInteger(value) &&
-  value >= min &&
-  value <= MAX_COUNT
-    ? value
-    : null
-
-// Days since the epoch for a real calendar day, else null.
-const dayNumber = (day: string) => {
-  const match = DAY.exec(day)
-  if (match === null) {
-    return null
-  }
-  const [year, month, date] = match.slice(1).map(Number) as [
-    number,
-    number,
-    number,
-  ]
-  const at = new Date(Date.UTC(year, month - 1, date))
-  return at.getUTCFullYear() === year &&
-    at.getUTCMonth() === month - 1 &&
-    at.getUTCDate() === date
-    ? at.getTime() / 86_400_000
-    : null
-}
+// Trimmed text, or '' for a missing (or, from untyped JS, non-string) field.
+const textOf = (field: unknown) =>
+  typeof field === 'string' ? field.trim() : ''
 
 // A lone surrogate makes encodeURIComponent throw; a builder never does.
 const encode = (text: string) => {
@@ -70,12 +54,13 @@ const encode = (text: string) => {
   }
 }
 
-// An untyped party is the sites' own default: 2 adults, 1 room, no children.
+// An untyped party is the sites' own default: 2 adults, 1 room, no
+// children. A count past Booking.com's limits counts as untyped.
 export const partyOrDefault = ({ adults, children, rooms }: StayParty) => {
-  const roomCount = countOf(rooms, 1) ?? 1
+  const roomCount = within(rooms, MAX_PEOPLE) ?? 1
   return {
-    adults: countOf(adults, 1) ?? Math.max(2, roomCount),
-    children: countOf(children, 0) ?? 0,
+    adults: within(adults, MAX_PEOPLE) ?? Math.max(2, roomCount),
+    children: within(children, MAX_CHILDREN, 0) ?? 0,
     rooms: roomCount,
   }
 }
@@ -104,32 +89,47 @@ export const flightsQuery = ({
   (adults === null ? '' : ` for ${adults} adult${adults === 1 ? '' : 's'}`)
 
 // Booking.com's search for `query` on those nights; null without a query,
-// or unless checkOut is 1–30 nights after checkIn. A count that isn't a
-// whole number in range falls back to the default party.
+// or unless checkOut is 1–30 nights after checkIn. A count out of the
+// site's limits, or fewer adults than rooms, falls back to the default
+// party.
 export const bookingSearchLink = ({
   query,
   checkIn,
   checkOut,
-  ...party
+  adults,
+  children,
+  rooms,
 }: BookingSearch): string | null => {
-  const search = encode(query.trim())
-  const days = { checkIn: checkIn.trim(), checkOut: checkOut.trim() }
-  const first = dayNumber(days.checkIn)
-  const last = dayNumber(days.checkOut)
-  if (search === null || search === '' || first === null || last === null) {
+  const search = encode(textOf(query))
+  const days = { checkIn: textOf(checkIn), checkOut: textOf(checkOut) }
+  if (
+    search === null ||
+    search === '' ||
+    !isDay(days.checkIn) ||
+    !isDay(days.checkOut)
+  ) {
     return null
   }
-  const nights = last - first
-  return nights < 1 || nights > MAX_NIGHTS
-    ? null
-    : `${BOOKING_SEARCH_PREFIX}${search}&${bookingQuery({ ...days, ...party })}`
+  const nights = nightsBetween(days.checkIn, days.checkOut)
+  if (nights < 1 || nights > MAX_NIGHTS) {
+    return null
+  }
+  const typed = within(adults, MAX_PEOPLE)
+  const roomCount = within(rooms, MAX_PEOPLE) ?? 1
+  return `${BOOKING_SEARCH_PREFIX}${search}&${bookingQuery({
+    ...days,
+    adults: typed !== null && typed >= roomCount ? typed : null,
+    children,
+    rooms,
+  })}`
 }
 
 const spokenDay = (day: string) => {
-  const match = DAY.exec(day)
-  return match === null || dayNumber(day) === null
-    ? null
-    : `${Number(match[3])} ${MONTHS[Number(match[2]) - 1]} ${match[1]}`
+  if (!isDay(day)) {
+    return null
+  }
+  const [year, month, date] = ymd(day)
+  return `${date} ${MONTHS[month]} ${year}`
 }
 
 // Google Flights for the trip; null without a destination. A blank `from`,
@@ -141,17 +141,16 @@ export const flightsSearchLink = ({
   date,
   adults,
 }: FlightSearch): string | null => {
-  const destination = to.trim()
+  const destination = textOf(to)
   if (destination === '') {
     return null
   }
-  const origin = from?.trim() || null
-  const day = date == null ? null : spokenDay(date.trim())
+  const day = spokenDay(textOf(date))
   const query = encode(
     flightsQuery({
-      from: origin,
+      from: textOf(from) || null,
       to: day === null ? destination : `${destination} on ${day}`,
-      adults: countOf(adults, 1),
+      adults: within(adults, MAX_PEOPLE),
     }),
   )
   return query === null ? null : `${FLIGHTS_LOOKUP_PREFIX}${query}`

@@ -139,9 +139,14 @@ the README like the usage example.
   `lookupLinkKind` returns `booking` / `flights` for its output (tested for
   every builder): a lookup re-run may replace it, and the app can show the
   lookup's glyph.
-- A builder never throws. `null` means "no link": a blank query or
-  destination, Booking.com without a 1–30 night stay of real `YYYY-MM-DD`
-  days, or text `encodeURIComponent` can't encode (a lone surrogate).
+- A builder never throws, and every text field may be `null` / `undefined`
+  (a record's optional fields go straight in). `null` means "no link": a
+  missing or blank query or destination, Booking.com without a 1–30 night
+  stay of real `YYYY-MM-DD` days, or text `encodeURIComponent` can't encode
+  (a lone surrogate).
+- The party keeps Booking.com's limits (30 people, 30 rooms, 10 children,
+  the booking-line parser's own); a count outside them, or fewer adults
+  than rooms, falls back to the default party (2 adults, 1 room).
 - Days are **local days**: convert a stored datetime with a zone to the
   place's day first; `"2026-10-20T15:00"` is refused, not guessed at.
 - `airportFor(code)` reads the table as is (any case: `airportFor('bus')` is
@@ -208,8 +213,8 @@ module.exports = {
   or carry exactly the stay query the kit builds: a pasted link carries
   tracking parameters and must stay a user link.
 - Clocks are injected (`now`), never read inside a pure function, and the
-  date-sensitive suites (and the link builders) also run in UTC+8 and
-  UTC+14 (`test:tz`).
+  date-sensitive suites also run in UTC+8 and UTC+14 (`test:tz`). The link
+  builders never read a clock: their day maths is UTC.
 
 ## Development
 
@@ -217,7 +222,7 @@ module.exports = {
 bun install
 bun run typecheck   # src (Node16/CJS) + tests and scripts
 bun run test        # Vitest, pinned to UTC
-bun run test:tz     # booking details, travel, link builders in Perth and Kiritimati
+bun run test:tz     # booking details + travel in Perth and Kiritimati
 bun run build       # tsc → dist/ (CJS + .d.ts + the JSON tables)
 bun run format:check
 ```
