@@ -37,6 +37,7 @@ import type {
   ResolveReason,
 } from '../core/types'
 import { linkPatch, type Resolver } from '../core/resolve'
+import { bookingQuery, flightsQuery, partyOrDefault } from '../core/build'
 import {
   BOOKING_SEARCH_PREFIX,
   DIRECTIONS_LOOKUP_PREFIX,
@@ -59,7 +60,6 @@ const mapsLink = (text: string) =>
 const websiteLink = (text: string) =>
   `${WEBSITE_LOOKUP_PREFIX}${encodeURIComponent(text)}`
 
-// Google Flights reads "for 2 adults" from `q=`.
 const flightsLink = ({
   intent: { to, from },
   adults,
@@ -67,10 +67,7 @@ const flightsLink = ({
   intent: Extract<TransportIntent, { kind: 'flight' }>
   adults: number | null
 }) =>
-  `${FLIGHTS_LOOKUP_PREFIX}${encodeURIComponent(
-    (from === null ? `flights to ${to}` : `flights from ${from} to ${to}`) +
-      (adults === null ? '' : ` for ${adults} adult${adults === 1 ? '' : 's'}`),
-  )}`
+  `${FLIGHTS_LOOKUP_PREFIX}${encodeURIComponent(flightsQuery({ from, to, adults }))}`
 
 // A flight's `to`/`from` names a city only when the user typed a bare
 // IATA/metro code for it ("MAN", "KIX 12 Oct", "LHR Sun 20:10" — the
@@ -83,7 +80,8 @@ const flightsLink = ({
 // Marathon", "THE Hague" fail this and are never read as codes, but
 // "SFO-Oakland", "NYC!", "KIX, 12 Oct" pass. An unknown code (`airportFor`
 // returns null) is treated the same as an untyped side: the plan only
-// says what a *known* code adds.
+// says what a *known* code adds. Public (`/travel`): the city to show under
+// a location field, case-sensitive so a typed "bus" or "the" is no code.
 const CODE_PREFIX = /^([A-Z]{3})\b/
 // No `[a-z]*` tail on the word branch: with one, "mar" would also open
 // "Marathon" (and "sat" "Saturn", "sun" "Sunday" dropping the day's own
@@ -105,7 +103,7 @@ const CODE_BOUNDARY = new RegExp(
 // MAR, SUN, DAD, BBQ...) stay — see Findings for why those are accepted.
 const CODE_STOPS = new Set(['USA'])
 
-const codedCity = (side: string | null): string | null => {
+export const airportCity = (side: string | null): string | null => {
   if (side === null) {
     return null
   }
@@ -151,8 +149,8 @@ const airportNoteLine = ({
   to,
   from,
 }: Extract<TransportIntent, { kind: 'flight' }>): NoteLine | null => {
-  const toCity = codedCity(to)
-  const fromCity = codedCity(from)
+  const toCity = airportCity(to)
+  const fromCity = airportCity(from)
   if (toCity === null && fromCity === null) {
     return null
   }
@@ -435,18 +433,8 @@ const officialSite = async (name: string, resolver: Resolver) => {
 
 type Stay = BookingDetails & { dates: StayDates }
 
-// An untyped party is the sites' own default: 2 adults, 1 room, no children.
-const partyOrDefault = ({ adults, children, rooms }: Stay) => ({
-  adults: adults ?? Math.max(2, rooms ?? 1),
-  children: children ?? 0,
-  rooms: rooms ?? 1,
-})
-
-const bookingQuery = (stay: Stay) => {
-  const { adults, children, rooms } = partyOrDefault(stay)
-  const { checkIn, checkOut } = stay.dates
-  return `checkin=${checkIn}&checkout=${checkOut}&group_adults=${adults}&no_rooms=${rooms}&group_children=${children}`
-}
+const stayQuery = ({ dates, ...party }: Stay) =>
+  bookingQuery({ ...dates, ...party })
 
 const agodaQuery = (stay: Stay) => {
   const { adults, children, rooms } = partyOrDefault(stay)
@@ -469,7 +457,7 @@ const stayPage = async ({
   stay: Stay | null
   resolver: Resolver
 }) => {
-  const params = stay === null ? null : bookingQuery(stay)
+  const params = stay === null ? null : stayQuery(stay)
   const query = `site:booking.com ${name} hotel`
   const { url: booking, reason } = await resolver.resolveFirstResult(query)
   const area = booking === null ? null : areaMatch({ url: booking, name })

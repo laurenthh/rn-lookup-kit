@@ -14,4 +14,14 @@ describe('README', () => {
       readFileSync(join(ROOT, 'examples', 'readme.ts'), 'utf8'),
     )
   })
+
+  it('shows examples/link-builders.ts as its link builders example', () => {
+    const readme = readFileSync(join(ROOT, 'README.md'), 'utf8')
+    const example = /## Link builders\n\n[^`]*```ts\n([\s\S]*?)```\n/.exec(
+      readme,
+    )?.[1]
+    expect(example).toBe(
+      readFileSync(join(ROOT, 'examples', 'link-builders.ts'), 'utf8'),
+    )
+  })
 })
