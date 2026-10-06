@@ -31,7 +31,7 @@ jobs:
         run: bun run build
       - name: Entry points load from dist
         run: >-
-          node -e "for (const e of ['', '/travel', '/dining', '/food', '/exercise'])
+          node -e "for (const e of ['', '/airports', '/travel', '/dining', '/food', '/exercise'])
           console.log('rn-lookup-kit' + e, Object.keys(require('rn-lookup-kit' + e)).length)"
       - name: Build as a consumer's install does (inside node_modules)
         run: |
